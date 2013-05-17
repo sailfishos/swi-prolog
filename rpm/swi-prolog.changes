@@ -1,0 +1,44 @@
+* Mon Dec 10 2012 Marko Saukko <marko.saukko@jollamobile.com> - 5.6.50
+- Updated packaging.
+
+* Tue Jul 24 2012 Dmitry Rozhkov <dmitry.rozhkov@jollamobile.com> - 5.6.50
+- Fix packaging: check if swi-prolog-library-core gets removed from the system
+  before deleting library index.
+
+* Wed Nov 09 2011 Marko Saukko <marko.saukko@cybercom.com> - 5.6.50
+- Some minor packaging fixes.
+
+* Thu May 05 2011 Anas Nashif <anas.nashif@intel.com> - 5.6.50
+- Change permissions of library to make rpm 4.9.0 happy
+
+* Thu Apr 14 2011 Kalle Lampila <kalle.lampila@cybercom.com> - 5.6.50
+- Fixed BMC#14698: rc_strerror reads past the end of array rc_errlist 
+- Fixed BMC#14697: pl_on_signal writes past the end of array sig_handlers
+- Fixed BMC#14688: PL_error uses stack local variable past scope 
+
+* Tue Jan 04 2011 Kalle Lampila <kalle.lampila@cybercom.com> - 5.6.50
+- Moved runtime libraries to a separate package (FEA#6701)
+- Renamed prolog library packages to avoid confusion to dynamic libraries (FEA#6701)
+- Fixed soname in library linking (FEA#6701)
+- Change package group to System/Resource Policy (BMC#11618)
+
+* Sat Dec 18 2010 Kalle Lampila <kalle.lampila@cybercom.com> - 5.6.50
+- Clean-up INDEX.pl generation
+- Moved boot32.prc to lib-core
+
+* Thu Dec 16 2010 Kalle Lampila <kalle.lampila@cybercom.com> - 5.6.50
+- New packaging using upstream tar.gz and patches
+- New yaml to support spectacle
+- Generate a pkgconfig file and include it in the dev subpackage
+- Fixed documentation directory under /usr/share/doc/
+- Added index.PL generation after installing/uninstalling prolog library
+- Fixed missing /usr/lib/libpl.so caused by Marko Saukko version
+
+* Mon Dec 13 2010 Marko Saukko <marko.saukko@cybercom.com> - 5.6.50
+- Added specify support and did some cleanup for spec
+
+* Wed Jun 30 2010 Markus Lehtonen <markus.lehtonen@nokia.com> - 5.6.50
+- Import to MeeGo OBS
+
+* Tue Jun 29 2010 Krisztian Litkey <mmf-audio-bounces@projects.maemo.org> - 5.6.50
+- Quick'n dirty initial packaging.

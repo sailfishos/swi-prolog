@@ -1,0 +1,27 @@
+From cf8d0bbd46bb77e1252ba56fed72cac824f37077 Mon Sep 17 00:00:00 2001
+From: Jan Wielemaker <J.Wielemaker@cs.vu.nl>
+Date: Thu, 14 Apr 2011 14:06:37 +0200
+Subject: [PATCH 2/3] FIXED: Bug#479: Writing outside allocated array in PL_signal() if passed
+ an illegal signal number.  Bug forwarded by Kalle Lampila.  Part of meego
+ quality assessment.
+
+---
+ src/pl-setup.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/pl-setup.c b/src/pl-setup.c
+index 711a212..7770708 100644
+--- a/src/pl-setup.c
++++ b/src/pl-setup.c
+@@ -805,7 +805,7 @@ PL_signal(int sigandflags, handler_t func)
+     SigHandler sh;
+     int sig = (sigandflags & 0xffff);
+ 
+-    if ( sig > MAXSIGNAL )
++    if ( sig >= MAXSIGNAL )
+     { warning("PL_signal(): illegal signal number: %d", sig);
+       return SIG_DFL;
+     }
+-- 
+1.7.2.3
+
