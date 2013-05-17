@@ -7,7 +7,7 @@ License: LGPLv2.1
 URL: http://www.swi-prolog.org/
 Sources:
     # http://www.swi-prolog.org/download/stable/src/
-    - "pl-%{version}.tar.gz"
+    - "%{name}-%{version}.tar.gz"
     - "%{name}-rpmlintrc"
     - "update-index.sh"
 Patches:
@@ -34,7 +34,11 @@ Description: |
 
 Provides:
     - pl
+
+SetupOptions: -q -n %{name}-%{version}/swi-prolog
+
 Configure: configure
+
 ConfigOptions:
     - --with-world
     - --enable-shared
