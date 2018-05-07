@@ -92,6 +92,8 @@ autoheader
 autoconf
 popd
 
+echo "warn" > .doc-action
+
 %configure \
     --with-world            \
     --disable-static        \
