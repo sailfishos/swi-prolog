@@ -5,7 +5,6 @@ Name:       swi-prolog
 Summary:    Prolog Interpreter
 Version:    %{swiplversion}
 Release:    1
-Group:      Development/Languages
 License:    BSD
 URL:        http://www.swi-prolog.org
 Source0:    %{name}-%{version}.tar.gz
@@ -29,7 +28,6 @@ a module system, garbage collection and an interface to the C language.
 
 %package runtime-lib
 Summary:    SWI-Prolog runtime environment dynamic lib
-Group:      System/Resource Policy
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -38,7 +36,6 @@ SWI-Prolog runtime environment dynamic lib.
 
 %package doc
 Summary:    Documentation for SWI-Prolog
-Group:      Documentation
 Requires:   %{name} = %{version}-%{release}
 
 %description doc
@@ -46,7 +43,6 @@ This package contains SWI-Prolog documentation (manual pages, README, etc.).
 
 %package library-core
 Summary:    Minimal library of SWI-Prolog predicates
-Group:      System/Resource Policy
 Requires(preun): /bin/rm
 Requires(post): %{name} = %{version}
 Requires(post): /bin/rm
@@ -59,7 +55,6 @@ to load foreign libraries.
 
 %package library
 Summary:    Library of SWI-Prolog predicates
-Group:      Development/Languages
 Requires:   %{name}-library-core = %{version}
 Requires(post): %{name} = %{version}
 Requires(post): /bin/rm
@@ -74,7 +69,6 @@ need this is you are running non-precompiled prolog code.
 
 %package devel
 Summary:    Headers files and libraries for SWI-Prolog C-interface
-Group:      Development/Libraries
 Requires:   %{name}-runtime-lib = %{version}
 Provides:   pl-devel
 
@@ -132,7 +126,7 @@ echo "warn" > .doc-action
     --without-pcre          \
     PLARCH=%{_arch}
 
-make %{?jobs:-j%jobs}
+%make_build
 
 %install
 rm -rf %{buildroot}
@@ -164,6 +158,7 @@ cd %{_libdir}/swipl-%{swiplversion}/library || :
 
 %files
 %defattr(-,root,root,-)
+%license LICENSE
 %dir %{_libdir}/swipl-%{swiplversion}
 %dir %{_libdir}/swipl-%{swiplversion}/bin
 %dir %{_libdir}/swipl-%{swiplversion}/bin/%{_arch}
