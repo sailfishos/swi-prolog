@@ -6,7 +6,7 @@ Summary:    Prolog Interpreter
 Version:    %{swiplversion}
 Release:    1
 License:    BSD
-URL:        http://www.swi-prolog.org
+URL:        https://github.com/sailfishos/swi-prolog
 Source0:    %{name}-%{version}.tar.gz
 Patch1:     0001-Fix-date-invocation-at-build-time.patch
 Patch2:     0002-Ensure-build-reproducibility.patch
