@@ -8,6 +8,7 @@ Release:    1
 License:    BSD
 URL:        http://www.swi-prolog.org
 Source0:    %{name}-%{version}.tar.gz
+Patch1:     0001-Fix-date-invocation-at-build-time.patch
 Provides:   pl
 
 %description

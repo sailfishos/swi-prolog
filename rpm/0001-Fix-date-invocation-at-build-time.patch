@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Martin Kampas <martin.kampas@jolla.com>
+Date: Tue, 13 Sep 2022 15:12:00 +0200
+Subject: [PATCH] Fix date invocation at build time
+
+Make does not understand quotes. It passes them through. In this case
+the result is a quoted string with spaces inside quoted string, so date
+fails with error "extra operand '%e'". The end result is empty string
+passed as BUILD_DATE.
+---
+ src/Makefile.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/Makefile.in b/src/Makefile.in
+index f027816ab9f56a6ce33c6208de19e8bd5857381f..923b973d7d2d05224bf27e1662ae613ff31b3059 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -167,12 +167,12 @@ UNICODE=blocks.pl unicode_data.pl
+ builddirs=../lib ../lib/$(PLARCH) os
+ 
+ # For reproducible builds
+-DATE_FMT = "%b %e %Y"
+-TIME_FMT = "%R"
++DATE_FMT = %b %e %Y
++TIME_FMT = %R
+ ifdef SOURCE_DATE_EPOCH
+ BUILD_DATE ?= $(shell date -u -d "@$(SOURCE_DATE_EPOCH)" "+$(DATE_FMT)" 2>/dev/null || date -u -r "$(SOURCE_DATE_EPOCH)" "+$(DATE_FMT)" 2>/dev/null || date -u "+$(DATE_FMT)")
+ BUILD_TIME ?= $(shell date -u -d "@$(SOURCE_DATE_EPOCH)" "+$(TIME_FMT)" 2>/dev/null || date -u -r "$(SOURCE_DATE_EPOCH)" "+$(TIME_FMT)" 2>/dev/null || date -u "+$(DATE_FMT)")
+-CFLAGS += -DBUILD_DATE=\"${BUILD_DATE}\" -DBUILD_TIME=\"${BUILD_TIME}\"
++CFLAGS += -DBUILD_DATE="\"${BUILD_DATE}\"" -DBUILD_TIME="\"${BUILD_TIME}\""
+ endif
+ 
+ # OPTIMISE=noprof: normal build; prof: build twice, using profiling
