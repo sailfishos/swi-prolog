@@ -1,0 +1,84 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Martin Kampas <martin.kampas@jolla.com>
+Date: Wed, 14 Sep 2022 08:57:26 +0200
+Subject: [PATCH] Ensure build reproducibility
+
+Note that in order to achieve build reproducibility of swi-prolog
+itself, just the occurence under rc_open() needs to be fixed. The other
+two occurences are not executed during swi-prolog build.
+---
+ src/rc/access.c | 10 ++++++++--
+ src/rc/build.c  |  6 +++++-
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/src/rc/access.c b/src/rc/access.c
+index 1dbf509561ac1c26e33dbb178f760cdc3a67c580..43c25b61403e315f4df4422f06e2207096e8a20b 100644
+--- a/src/rc/access.c
++++ b/src/rc/access.c
+@@ -270,12 +270,15 @@ decode_member_header(RcArchive rca, RcMember mbr)
+ static int
+ register_header(RcArchive rca, rc_size hdrlen)
+ { rc_member hdr;
++  char *source_date_epoch = getenv("SOURCE_DATE_EPOCH");
+ 
+   memset(&hdr, 0, sizeof(hdr));
+   hdr.name      = strdup("$header");
+   hdr.rc_class  = strdup("$rc");
+   hdr.encoding  = strdup("none");
+-  hdr.modified  = time(NULL);
++  hdr.modified = source_date_epoch
++    ? strtol(source_date_epoch, NULL, 10)
++    : time(NULL);
+   hdr.size      = hdrlen;
+   hdr.offset    = -(intptr_t)hdrlen;
+ 
+@@ -593,6 +596,7 @@ rc_open(RcArchive rca, const char *name, const char *rcclass, int flags)
+     m = rc_find_member(rca, name, rcclass);
+   else if ( (flags & RC_WRONLY) )
+   { rc_member hdr;
++    char *source_date_epoch = getenv("SOURCE_DATE_EPOCH");
+ 
+     memset(&hdr, 0, sizeof(hdr));
+     hdr.name     = strdup(name);
+@@ -600,7 +604,9 @@ rc_open(RcArchive rca, const char *name, const char *rcclass, int flags)
+     hdr.encoding = strdup("none");
+     hdr.file	 = NULL;
+     hdr.size	 = 0;
+-    hdr.modified = time(NULL);
++    hdr.modified = source_date_epoch
++      ? strtol(source_date_epoch, NULL, 10)
++      : time(NULL);
+ 
+     rca->modified = TRUE;
+     m = rc_register_member(rca, &hdr);
+diff --git a/src/rc/build.c b/src/rc/build.c
+index 28b87f9d343ab3f3da89d21198bfe378d1854057..0f08d6d715218767a0865f9b08d43a503b6bb9d4 100644
+--- a/src/rc/build.c
++++ b/src/rc/build.c
+@@ -35,6 +35,7 @@
+ #define RC_KERNEL 1
+ #include "rc.h"
+ 
++#include <stdlib.h>
+ #include <stdio.h>
+ #include <sys/types.h>
+ #include <string.h>
+@@ -68,6 +69,7 @@ rc_append_file(RcArchive rca,
+ 	       const char *file)
+ { rc_member hdr;
+   struct stat buf;
++  char *source_date_epoch = getenv("SOURCE_DATE_EPOCH");
+ 
+   if ( stat(file, &buf)	< 0 )
+   { rc_errno = RCE_ERRNO;
+@@ -80,7 +82,9 @@ rc_append_file(RcArchive rca,
+   hdr.encoding = strdup(enc);
+   hdr.file     = strdup(file);
+   hdr.size     = buf.st_size;
+-  hdr.modified = buf.st_mtime;
++  hdr.modified = source_date_epoch
++    ? strtol(source_date_epoch, NULL, 10)
++    : buf.st_mtime;
+ 
+   rca->modified = TRUE;
+ 
