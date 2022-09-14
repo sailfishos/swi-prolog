@@ -78,7 +78,7 @@ that uses the C-interface to SWI-Prolog.
 
 
 %prep
-%setup -q -n %{name}-%{version}/swi-prolog
+%autosetup -p1 -n %{name}-%{version}/swi-prolog
 
 %build
 pushd src
